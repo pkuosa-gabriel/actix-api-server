@@ -1,0 +1,7 @@
+CREATE TABLE poems (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR NOT NULL,
+  author VARCHAR NOT NULL,
+  contents TEXT NOT NULL,
+  is_public BOOLEAN NOT NULL DEFAULT 'f'
+)
