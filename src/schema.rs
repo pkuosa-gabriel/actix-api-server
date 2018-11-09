@@ -8,6 +8,4 @@ table! {
     }
 }
 
-allow_tables_to_appear_in_same_query!(
-    poems,
-);
+allow_tables_to_appear_in_same_query!(poems);
