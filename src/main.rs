@@ -22,7 +22,7 @@ fn post_poem(mut poem: Json<Poem>) -> Result<Json<Poem>> {
 }
 
 fn get_poems(_req: &HttpRequest) -> Result<Json<Poem>> {
-    Ok(Json(Poem{
+    Ok(Json(Poem {
         title: String::from("Hello"),
         author: String::from("Mike"),
         contents: String::from("Hello, Mike!"),
