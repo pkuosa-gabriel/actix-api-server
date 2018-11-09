@@ -6,3 +6,13 @@ pub struct Poem {
     pub contents: String,
     pub is_public: bool,
 }
+
+use super::schema::poems;
+
+#[derive(Insertable)]
+#[table_name = "poems"]
+pub struct NewPoem<'a> {
+    pub title: &'a str,
+    pub author: &'a str,
+    pub contents: &'a str,
+}
