@@ -11,3 +11,6 @@
 
 /target
 **/*.rs.bk
+
+# Environment configuration
+.env
