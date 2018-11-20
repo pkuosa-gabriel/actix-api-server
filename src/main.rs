@@ -6,7 +6,7 @@ extern crate serde;
 extern crate serde_json;
 
 use actix_web::middleware::Logger;
-use actix_web::{server, App, HttpRequest, Json, Result};
+use actix_web::{server, App, HttpRequest, Json, Responder, Result};
 use std::env;
 
 #[derive(Deserialize, Serialize)]
@@ -14,6 +14,11 @@ struct Poem {
     title: String,
     author: String,
     contents: String,
+}
+
+fn greet(req: &HttpRequest) -> impl Responder {
+    let to = req.match_info().get("name").unwrap_or("World");
+    format!("Hello {}!", to)
 }
 
 fn post_poem(mut poem: Json<Poem>) -> Result<Json<Poem>> {
@@ -45,14 +50,21 @@ fn main() {
         }
     };
     server::new(|| {
-        App::new()
-            .middleware(Logger::default())
-            .middleware(Logger::new("%a %{User-Agent}i"))
-            .prefix("/api/v1")
-            .resource("/poems", |r| {
-                r.get().f(get_poems);
-                r.post().with(post_poem);
-            })
+        vec![
+            App::new()
+                .middleware(Logger::default())
+                .middleware(Logger::new("%a %{User-Agent}i"))
+                .prefix("/api/v1")
+                .resource("/poems", |r| {
+                    r.get().f(get_poems);
+                    r.post().with(post_poem);
+                }),
+            App::new()
+                .middleware(Logger::default())
+                .middleware(Logger::new("%a %{User-Agent}i"))
+                .resource("/", |r| r.f(greet))
+                .resource("/{name}", |r| r.f(greet)),
+        ]
     }).bind(address)
         .unwrap()
         .run();
